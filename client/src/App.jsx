@@ -1,5 +1,6 @@
 import { Toaster } from 'react-hot-toast'
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar';
+import Admin from './components/Admin';
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
@@ -29,6 +30,7 @@ function App() {
         <Experience />
         <Projects />
         <Contact />
+        <Admin />
       </main>
       <Footer />
     </>

@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 import './Contact.css'
 
-const API = 'http://localhost:5000/api/contact'
+const API = '/api/contact';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
