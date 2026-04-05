@@ -1,0 +1,165 @@
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.about-avatar-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.avatar-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.3), transparent 70%);
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: blur(30px);
+  z-index: 0;
+}
+
+.avatar-box {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
+  border: 2px solid rgba(124,58,237,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.avatar-initials {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(124,58,237,0.3);
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.stat-card {
+  padding: 16px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(124,58,237,0.3);
+}
+
+.stat-val {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Bio */
+.bio-text {
+  font-size: 1.02rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.bio-text strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.education-list {
+  margin-top: 32px;
+}
+
+.edu-heading {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.edu-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+  margin-bottom: 10px;
+  transition: var(--transition);
+}
+
+.edu-item:hover {
+  border-color: rgba(124,58,237,0.3);
+  transform: translateX(4px);
+}
+
+.edu-year {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-light);
+  min-width: 42px;
+  padding-top: 2px;
+}
+
+.edu-degree {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.edu-inst {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.about-cta {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .about-avatar-wrap { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+}
