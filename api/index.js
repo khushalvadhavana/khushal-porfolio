@@ -14,9 +14,13 @@ app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/contact', require('./routes/contact'));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.log('❌ MongoDB error:', err));
+if (process.env.MONGO_URI) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('✅ MongoDB connected'))
+    .catch(err => console.error('❌ MongoDB error:', err));
+} else {
+  console.warn('⚠️ No MONGO_URI provided. Database features will be disabled.');
+}
 
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'production') {
