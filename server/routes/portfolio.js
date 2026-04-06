@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const Portfolio = require('../models/Portfolio');
 
-const portfolioData = {
+// Initial seed data (from your previous code)
+const initialPortfolioData = {
   name: "Khushal Vadhavana",
-  title: "Data Analyst & React JS Developer",
+  title: "Data Analyst, Full Stack Developer, Freelancer",
   email: "khushalvadhavana856@gmail.com",
   phone: "9638737342",
   location: "Somnath, Veraval-363365",
@@ -11,15 +13,13 @@ const portfolioData = {
   linkedin: "https://www.linkedin.com/in/khushalvadhavana",
   summary:
     "Eager Data Analyst and Front-End (React JS) Developer with a strong foundation in building dynamic web applications and performing complex data analysis. Experienced in industrial automation data processing and CRM dashboard development.",
-
   skills: {
-    languages: ["HTML", "CSS", "JavaScript", "Python", "PHP"],
+    languages: ["HTML", "CSS", "JavaScript", "Python"],
     frameworks: ["React JS", "Node JS", "Express JS"],
     databases: ["MongoDB", "MySQL", "PostgreSQL"],
-    tools: ["PowerBI", "Tableau", "MS Excel", "Figma", "Tally"],
+    tools: ["PowerBI", "MS Excel", "Figma"],
     design: ["UI/UX Design", "Figma", "Bootstrap", "MUI"],
   },
-
   experience: [
     {
       id: 1,
@@ -71,7 +71,6 @@ const portfolioData = {
       tech: ["React JS", "Figma", "CSS"],
     },
   ],
-
   projects: [
     {
       id: 1,
@@ -92,7 +91,6 @@ const portfolioData = {
       icon: "🏨",
     },
   ],
-
   education: [
     {
       degree: "Bachelor of Computer Applications (BCA)",
@@ -115,9 +113,44 @@ const portfolioData = {
   ],
 };
 
+// In-memory fallback store (used when MongoDB is not available)
+let inMemoryPortfolio = { ...initialPortfolioData, updatedAt: new Date() };
+
 // GET /api/portfolio
-router.get('/', (req, res) => {
-  res.json({ success: true, data: portfolioData });
+router.get('/', async (req, res) => {
+  try {
+    let portfolio = await Portfolio.findOne();
+    if (!portfolio) {
+      portfolio = new Portfolio(initialPortfolioData);
+      await portfolio.save();
+    }
+    inMemoryPortfolio = portfolio.toObject(); // keep in-memory in sync
+    res.json({ success: true, data: portfolio });
+  } catch (err) {
+    console.warn('⚠️ MongoDB unavailable, serving in-memory data:', err.message);
+    res.json({ success: true, data: inMemoryPortfolio, source: 'fallback' });
+  }
+});
+
+// PUT /api/portfolio
+router.put('/', async (req, res) => {
+  try {
+    const updatedData = req.body;
+    let portfolio = await Portfolio.findOne();
+    if (!portfolio) {
+      portfolio = new Portfolio(updatedData);
+    } else {
+      Object.assign(portfolio, updatedData);
+      portfolio.updatedAt = Date.now();
+    }
+    await portfolio.save();
+    inMemoryPortfolio = portfolio.toObject(); // keep in-memory in sync
+    res.json({ success: true, message: 'Portfolio updated successfully!', data: portfolio });
+  } catch (err) {
+    console.warn('⚠️ MongoDB unavailable, saving to in-memory store:', err.message);
+    inMemoryPortfolio = { ...inMemoryPortfolio, ...req.body, updatedAt: new Date() };
+    res.json({ success: true, message: 'Saved (in-memory, changes not persisted to DB)', data: inMemoryPortfolio });
+  }
 });
 
 module.exports = router;

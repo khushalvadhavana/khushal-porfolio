@@ -6,17 +6,24 @@ import './Hero.css'
 import developer1 from '../assets/images/developer-1.jpg'
 import developer2 from '../assets/images/developer-2.jpg'
 
-const TITLES = ['Data Analyst', 'React JS Developer', 'Problem Solver']
+const TITLES = ['Data Analyst', 'Full Stack Developer', 'Freelancer']
 
-export default function Hero() {
+export default function Hero({ data }) {
   const canvasRef = useRef(null)
   const [titleIndex, setTitleIndex] = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting, setDeleting] = useState(false)
 
+  // Split title from API if it exists and contains multiple roles, else use defaults
+  const apiTitles = data?.title ? data.title.split(/[&,]/).map(t => t.trim()) : []
+  const titles = apiTitles.length > 0 ? [...new Set([...apiTitles, ...TITLES])] : TITLES
+  const firstName = data?.name ? data.name.split(' ')[0] : 'Khushal'
+  const lastName = data?.name ? data.name.split(' ').slice(1).join(' ') : 'Vadhavana'
+
   // Particle background (Cyberpunk neon colors)
   useEffect(() => {
     const canvas = canvasRef.current
+    if (!canvas) return
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -85,14 +92,14 @@ export default function Hero() {
 
   // Typewriter effect
   useEffect(() => {
-    const current = TITLES[titleIndex]
+    const current = titles[titleIndex]
     if (!deleting && displayed === current) {
       const t = setTimeout(() => setDeleting(true), 2500)
       return () => clearTimeout(t)
     }
     if (deleting && displayed === '') {
       setDeleting(false)
-      setTitleIndex(i => (i + 1) % TITLES.length)
+      setTitleIndex(i => (i + 1) % titles.length)
       return
     }
     const speed = deleting ? 30 : 60
@@ -102,7 +109,7 @@ export default function Hero() {
       )
     }, speed)
     return () => clearTimeout(t)
-  }, [displayed, deleting, titleIndex])
+  }, [displayed, deleting, titleIndex, titles])
 
   return (
     <section id="home" className="hero">
@@ -126,8 +133,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.7, ease: 'easeOut' }}
           >
-            Khushal<br />
-            <span className="gradient-text neon-text">Vadhavana</span>
+            {firstName}<br />
+            <span className="gradient-text neon-text">{lastName}</span>
           </motion.h1>
 
           <motion.div
@@ -147,9 +154,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            Eager data enthusiast and React developer with a passion for
-            building dynamic web applications and extracting insights from data.
-            Based in <strong>Somnath, Veraval</strong>.
+            {data?.summary || 'Eager data enthusiast and React developer with a passion for building dynamic web applications and extracting insights from data.'}
+            {data?.location && <><br />Based in <strong>{data.location}</strong>.</>}
           </motion.p>
 
           <motion.div

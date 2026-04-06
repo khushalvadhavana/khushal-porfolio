@@ -1,32 +1,13 @@
 import { motion } from 'framer-motion'
 import './Projects.css'
 
-const projects = [
-  {
-    id: 1,
-    title: 'Netflix Data Analysis',
-    emoji: '📊',
-    type: 'Data Analysis',
-    description:
-      'Conducted exploratory data analysis on a dataset of 9,800+ movies. Visualised genre trends, popularity distributions, and rating patterns using Python libraries.',
-    tech: ['Python', 'Pandas', 'NumPy', 'Seaborn', 'Matplotlib'],
-    highlights: ['9,800+ entries analysed', 'Genre & popularity trends', 'EDA visualisations'],
-    accent: 'var(--primary)',
-  },
-  {
-    id: 2,
-    title: 'Hotel Management System',
-    emoji: '🏨',
-    type: 'Web Application',
-    description:
-      'Built a full React JS frontend for reservation tracking and room occupancy management, focusing on operational efficiency and intuitive user interface.',
-    tech: ['React JS', 'CSS', 'JavaScript'],
-    highlights: ['Real-time reservations', 'Room occupancy tracking', 'Admin dashboard'],
-    accent: 'var(--secondary)',
-  },
-]
+const ACCENTS = ['var(--primary)', 'var(--secondary)', '#a855f7', '#f59e0b', '#10b981']
 
-export default function Projects() {
+export default function Projects({ data }) {
+  const projects = data || []
+
+  if (projects.length === 0) return null
+
   return (
     <section id="projects" className="section projects-section">
       <div className="container">
@@ -43,33 +24,34 @@ export default function Projects() {
         <div className="projects-grid">
           {projects.map((p, i) => (
             <motion.div
-              key={p.id}
+              key={p._id || p.id || i}
               className="project-card glass"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: 'easeOut' }}
               whileHover={{ y: -8 }}
-              style={{ '--card-accent': p.accent }}
+              style={{ '--card-accent': ACCENTS[i % ACCENTS.length] }}
             >
               <div className="project-top">
-                <div className="project-emoji">{p.emoji}</div>
-                <span className="project-type">{p.type}</span>
+                <div className="project-emoji">{p.icon || '🚀'}</div>
+                <span className="project-type">{p.type || 'Project'}</span>
               </div>
               <h3 className="project-title">{p.title}</h3>
               <p className="project-desc">{p.description}</p>
 
-              <ul className="project-highlights">
-                {p.highlights.map(h => (
-                  <li key={h}><span className="highlight-dot" />{h}</li>
-                ))}
-              </ul>
-
               <div className="project-tech">
-                {p.tech.map(t => (
+                {(p.tech || []).map(t => (
                   <span key={t} className="project-tag">{t}</span>
                 ))}
               </div>
+
+              {(p.link || p.github) && (
+                <div className="project-links" style={{ marginTop: '12px', display: 'flex', gap: '10px' }}>
+                  {p.link && <a href={p.link} target="_blank" rel="noreferrer" className="project-tag" style={{ textDecoration: 'none' }}>🔗 Live</a>}
+                  {p.github && <a href={p.github} target="_blank" rel="noreferrer" className="project-tag" style={{ textDecoration: 'none' }}>GitHub</a>}
+                </div>
+              )}
 
               <div className="project-glow" />
             </motion.div>

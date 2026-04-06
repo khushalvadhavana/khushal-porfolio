@@ -1,33 +1,8 @@
 import { motion } from 'framer-motion'
 import './Skills.css'
 
-const skillGroups = [
-  {
-    category: 'Languages',
-    icon: '💻',
-    skills: ['HTML', 'CSS', 'JavaScript', 'Python', 'PHP'],
-  },
-  {
-    category: 'Frameworks',
-    icon: '⚡',
-    skills: ['React JS', 'Node JS', 'Express JS', 'Bootstrap', 'MUI'],
-  },
-  {
-    category: 'Databases',
-    icon: '🗄️',
-    skills: ['MongoDB', 'MySQL', 'PostgreSQL'],
-  },
-  {
-    category: 'Data & Tools',
-    icon: '📊',
-    skills: ['PowerBI', 'Tableau', 'MS Excel', 'Pandas', 'NumPy'],
-  },
-  {
-    category: 'Design',
-    icon: '🎨',
-    skills: ['Figma', 'UI/UX Design'],
-  },
-]
+const ICONS = { languages: '💻', frameworks: '⚡', databases: '🗄️', tools: '📊', design: '🎨' }
+const LABELS = { languages: 'Languages', frameworks: 'Frameworks', databases: 'Databases', tools: 'Data & Tools', design: 'Design' }
 
 const topSkills = [
   { name: 'React JS', pct: 90 },
@@ -45,7 +20,16 @@ const fadeUp = {
   })
 }
 
-export default function Skills() {
+export default function Skills({ data }) {
+  // Build skillGroups from API data, fallback to empty
+  const skillGroups = data
+    ? Object.entries(data).map(([key, skills]) => ({
+        category: LABELS[key] || key,
+        icon: ICONS[key] || '🔧',
+        skills: Array.isArray(skills) ? skills : [],
+      })).filter(g => g.skills.length > 0)
+    : []
+
   return (
     <section id="skills" className="section skills-section">
       <div className="container">

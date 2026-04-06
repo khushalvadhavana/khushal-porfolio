@@ -8,13 +8,16 @@ const navLinks = [
   { label: 'Skills', href: '#skills' },
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
-  { label: 'Admin', href: '#admin' },
+  { label: 'Contact', href: '#contact' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ data }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('home')
+
+  const firstName = data?.name ? data.name.split(' ')[0] : 'Khushal'
+  const firstLetter = firstName.charAt(0)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -31,7 +34,7 @@ export default function Navbar() {
     >
       <div className="nav-inner">
         <a href="#home" className="nav-logo">
-          <span className="logo-k">K</span>hushal
+          <span className="logo-k">{firstLetter}</span>{firstName.slice(1)}
         </a>
 
         <ul className="nav-links">

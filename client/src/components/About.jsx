@@ -1,12 +1,5 @@
-import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import './About.css'
-
-const education = [
-  { degree: 'Bachelor of Computer Applications (BCA)', institution: 'Maharaja Sayajirao University', year: '2023', loc: 'Vadodara' },
-  { degree: '12th Grade', institution: 'Ankur Saurabh High School', year: '2020', loc: 'Veraval' },
-  { degree: '10th Grade', institution: 'Darshan School', year: '2018', loc: 'Veraval' },
-]
 
 const stats = [
   { value: '3+', label: 'Years Experience' },
@@ -23,7 +16,14 @@ const fadeUp = {
   })
 }
 
-export default function About() {
+export default function About({ data }) {
+  const education = data?.education || [
+    { degree: 'Bachelor of Computer Applications (BCA)', institution: 'Maharaja Sayajirao University', year: '2023', location: 'Vadodara' },
+    { degree: '12th Grade', institution: 'Ankur Saurabh High School', year: '2020', location: 'Veraval' },
+    { degree: '10th Grade', institution: 'Darshan School', year: '2018', location: 'Veraval' },
+  ]
+  const summary = data?.summary || null
+
   return (
     <section id="about" className="section">
       <div className="container">
@@ -76,11 +76,11 @@ export default function About() {
             <div className="education-list">
               <h3 className="edu-heading">Education</h3>
               {education.map((e, i) => (
-                <motion.div key={e.degree} className="edu-item glass" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                <motion.div key={e._id || i} className="edu-item glass" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                   <div className="edu-year">{e.year}</div>
                   <div>
                     <div className="edu-degree">{e.degree}</div>
-                    <div className="edu-inst">{e.institution} · {e.loc}</div>
+                    <div className="edu-inst">{e.institution} · {e.location || e.loc}</div>
                   </div>
                 </motion.div>
               ))}

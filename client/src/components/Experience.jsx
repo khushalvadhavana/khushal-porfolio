@@ -1,60 +1,11 @@
 import { motion } from 'framer-motion'
 import './Experience.css'
 
-const experiences = [
-  {
-    id: 1,
-    company: 'Chemtrols Industries Pvt. Ltd.',
-    role: 'Data Analyst',
-    duration: 'Jun 2024 – Present',
-    location: 'Vadodara',
-    description: [
-      'Cleaning and preprocessing data for IOCL automation reports.',
-      'Automating routine reporting in Excel to streamline workflows.',
-      'Troubleshooting industrial sensor devices and automation systems.',
-    ],
-    tech: ['Python', 'MS Excel', 'PowerBI'],
-    current: true,
-  },
-  {
-    id: 2,
-    company: 'VeravalOnline Pvt. Ltd.',
-    role: 'Front-End (React JS) Developer',
-    duration: 'Dec 2023 – Apr 2024',
-    location: 'Vadodara',
-    description: [
-      'Developed payroll, attendance, and salary slip generation systems.',
-      'Designed admin and employee dashboards using Bootstrap and MUI.',
-    ],
-    tech: ['React JS', 'Bootstrap', 'MUI'],
-  },
-  {
-    id: 3,
-    company: 'Syndell Technologies Pvt. Ltd.',
-    role: 'Front-End (React JS) Developer',
-    duration: 'Jun 2023 – Dec 2023',
-    location: 'Ahmedabad',
-    description: [
-      'Led development of a dynamic CRM admin dashboard.',
-      'Developed REST APIs to connect React frontend with MongoDB.',
-    ],
-    tech: ['React JS', 'MongoDB', 'REST API'],
-  },
-  {
-    id: 4,
-    company: 'Zen Softtech Pvt. Ltd.',
-    role: 'Front-End React JS Developer (Intern)',
-    duration: 'Dec 2022 – Apr 2023',
-    location: 'Vadodara',
-    description: [
-      'Developed E-learning management system (LMS) dashboards.',
-      'Converted Figma designs into functional React components.',
-    ],
-    tech: ['React JS', 'Figma', 'CSS'],
-  },
-]
+export default function Experience({ data }) {
+  const experiences = data || []
 
-export default function Experience() {
+  if (experiences.length === 0) return null
+
   return (
     <section id="experience" className="section exp-section">
       <div className="container">
@@ -71,7 +22,7 @@ export default function Experience() {
         <div className="timeline">
           {experiences.map((exp, i) => (
             <motion.div
-              key={exp.id}
+              key={exp._id || exp.id || i}
               className="timeline-item"
               initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -95,12 +46,12 @@ export default function Experience() {
                   <span className="card-location">{exp.location}</span>
                 </div>
                 <ul className="card-desc">
-                  {exp.description.map((d, di) => (
+                  {(Array.isArray(exp.description) ? exp.description : [exp.description]).map((d, di) => (
                     <li key={di}>{d}</li>
                   ))}
                 </ul>
                 <div className="card-tech">
-                  {exp.tech.map(t => (
+                  {(exp.tech || []).map(t => (
                     <span key={t} className="tech-tag">{t}</span>
                   ))}
                 </div>

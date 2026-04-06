@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/Navbar';
 import Admin from './components/Admin';
@@ -10,6 +13,26 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 
 function App() {
+  const [portfolio, setPortfolio] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPortfolio = async () => {
+    try {
+      const res = await axios.get('/api/portfolio');
+      setPortfolio(res.data.data);
+    } catch (err) {
+      console.error("Error fetching portfolio", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolio();
+  }, []);
+
+  if (loading) return <div className="loading-screen">Loading Portfolio...</div>;
+
   return (
     <>
       <Toaster
@@ -22,17 +45,23 @@ function App() {
           },
         }}
       />
-      <Navbar />
+      <Navbar data={portfolio} />
       <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Contact />
-        <Admin />
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Hero data={portfolio} />
+              <About data={portfolio} />
+              <Skills data={portfolio?.skills} />
+              <Experience data={portfolio?.experience} />
+              <Projects data={portfolio?.projects} />
+              <Contact />
+            </>
+          } />
+          <Route path="/admin" element={<Admin onUpdate={fetchPortfolio} />} />
+        </Routes>
       </main>
-      <Footer />
+      <Footer data={portfolio} />
     </>
   )
 }
