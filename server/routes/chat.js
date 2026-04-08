@@ -67,14 +67,24 @@ router.post('/', async (req, res) => {
     });
 
     // Ensure history starts with a 'user' role and filter out any invalid/empty messages
-    let formattedHistory = (history || []).filter(msg => 
+    let formattedHistory = (history || []).map(msg => ({
+      role: (msg.role === 'assistant' || msg.role === 'model') ? 'model' : 'user',
+      parts: msg.parts
+    })).filter(msg => 
       msg.parts && msg.parts[0] && msg.parts[0].text && msg.parts[0].text.trim() !== ""
     );
 
-    // Gemini requires history to start with space 'user'
+    // Gemini requires history to start with 'user' role
     while (formattedHistory.length > 0 && formattedHistory[0].role !== 'user') {
       formattedHistory.shift();
     }
+
+    // Also Gemini requires alternating roles: user, model, user, model...
+    // Let's ensure no two consecutive messages have the same role
+    formattedHistory = formattedHistory.filter((msg, index) => {
+      if (index === 0) return true;
+      return msg.role !== formattedHistory[index - 1].role;
+    });
 
     const chat = model.startChat({
       history: formattedHistory,
