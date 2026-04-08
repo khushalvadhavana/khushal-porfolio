@@ -76,8 +76,24 @@ router.post('/', async (req, res) => {
 
     res.json({ text });
   } catch (error) {
-    console.error('Chat Error:', error);
-    res.status(500).json({ error: 'Failed to get response from AI.' });
+    console.error('Gemini API Error Detail:', {
+      message: error.message,
+      stack: error.stack,
+      response: error.response ? error.response.data : 'No response data'
+    });
+    
+    // Provide a more descriptive error if possible
+    let errorMessage = 'Failed to get response from AI.';
+    if (error.message && error.message.includes('API key not valid')) {
+      errorMessage = 'The API key provided is not valid. Please check your Vercel settings.';
+    } else if (error.message && error.message.includes('User location is not supported')) {
+      errorMessage = 'Gemini API is not available in the region where your server is running.';
+    }
+
+    res.status(500).json({ 
+      error: errorMessage,
+      details: error.message // Sending this to help debug
+    });
   }
 });
 
