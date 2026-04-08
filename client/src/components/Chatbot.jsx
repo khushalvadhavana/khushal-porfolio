@@ -38,7 +38,7 @@ const Chatbot = () => {
       const apiUrl = import.meta.env.VITE_API_URL || '';
       const response = await axios.post(`${apiUrl}/api/chat`, {
         message: input,
-        history: messages.map(msg => ({
+        history: messages.slice(1).map(msg => ({
           role: msg.role === 'model' ? 'model' : 'user',
           parts: [{ text: msg.text }]
         }))
