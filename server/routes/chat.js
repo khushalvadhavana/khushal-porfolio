@@ -66,8 +66,18 @@ router.post('/', async (req, res) => {
       systemInstruction: SYSTEM_INSTRUCTION
     });
 
+    // Ensure history starts with a 'user' role and filter out any invalid/empty messages
+    let formattedHistory = (history || []).filter(msg => 
+      msg.parts && msg.parts[0] && msg.parts[0].text && msg.parts[0].text.trim() !== ""
+    );
+
+    // Gemini requires history to start with space 'user'
+    while (formattedHistory.length > 0 && formattedHistory[0].role !== 'user') {
+      formattedHistory.shift();
+    }
+
     const chat = model.startChat({
-      history: history || [],
+      history: formattedHistory,
     });
 
     const result = await chat.sendMessage(message);
