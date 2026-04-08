@@ -35,7 +35,8 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/chat`, {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await axios.post(`${apiUrl}/api/chat`, {
         message: input,
         history: messages.map(msg => ({
           role: msg.role === 'model' ? 'model' : 'user',
@@ -46,7 +47,15 @@ const Chatbot = () => {
       setMessages(prev => [...prev, { role: 'model', text: response.data.text }]);
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { role: 'model', text: "Sorry, I'm having trouble connecting right now. Please try again later!" }]);
+      let errorText = "Sorry, I'm having trouble connecting right now. Please try again later!";
+      
+      if (error.response && error.response.data && error.response.data.error) {
+        errorText = `Assistant Error: ${error.response.data.error}`;
+      } else if (error.message === 'Network Error') {
+        errorText = "Connection error. Make sure you've added the GEMINI_API_KEY to your Vercel settings.";
+      }
+
+      setMessages(prev => [...prev, { role: 'model', text: errorText }]);
     } finally {
       setIsLoading(false);
     }
