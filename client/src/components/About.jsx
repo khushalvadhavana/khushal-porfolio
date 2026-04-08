@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Skeleton } from './Skeleton'
 import './About.css'
 
 const stats = [
@@ -16,12 +17,8 @@ const fadeUp = {
   })
 }
 
-export default function About({ data }) {
-  const education = data?.education || [
-    { degree: 'Bachelor of Computer Applications (BCA)', institution: 'Maharaja Sayajirao University', year: '2023', location: 'Vadodara' },
-    { degree: '12th Grade', institution: 'Ankur Saurabh High School', year: '2020', location: 'Veraval' },
-    { degree: '10th Grade', institution: 'Darshan School', year: '2018', location: 'Veraval' },
-  ]
+export default function About({ data, loading }) {
+  const education = data?.education || []
   const summary = data?.summary || null
 
   return (
@@ -49,12 +46,21 @@ export default function About({ data }) {
               <div className="avatar-ring" />
             </div>
             <div className="about-stats">
-              {stats.map((s, i) => (
-                <motion.div key={s.label} className="stat-card glass" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                  <span className="stat-val gradient-text">{s.value}</span>
-                  <span className="stat-label">{s.label}</span>
-                </motion.div>
-              ))}
+              {loading && !data ? (
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="stat-card glass">
+                    <Skeleton width="40px" height="24px" className="mb-2" />
+                    <Skeleton width="60px" height="12px" />
+                  </div>
+                ))
+              ) : (
+                stats.map((s, i) => (
+                  <motion.div key={s.label} className="stat-card glass" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                    <span className="stat-val gradient-text">{s.value}</span>
+                    <span className="stat-label">{s.label}</span>
+                  </motion.div>
+                ))
+              )}
             </div>
           </motion.div>
 
@@ -66,24 +72,46 @@ export default function About({ data }) {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
-            <p className="bio-text">
-              Hi! I'm <strong>Khushal Vadhavana</strong>, an eager Data Analyst and React JS Developer based in Somnath, Veraval. I love turning complex data into compelling visualisations and building fast, responsive web applications.
-            </p>
-            <p className="bio-text" style={{ marginTop: 16 }}>
-              Currently at <strong>Chemtrols Industries</strong>, I work with industrial automation data — cleaning, preprocessing, and visualising sensor outputs for IOCL reports. I thrive at the intersection of data and design.
-            </p>
+            {loading && !data ? (
+              <div className="skeleton-bio">
+                <Skeleton width="100%" height="20px" className="mb-2" />
+                <Skeleton width="100%" height="20px" className="mb-2" />
+                <Skeleton width="80%" height="20px" className="mb-4" />
+                <Skeleton width="100%" height="20px" className="mb-2" />
+                <Skeleton width="60%" height="20px" />
+              </div>
+            ) : (
+              <>
+                <p className="bio-text">
+                  Hi! I'm <strong>Khushal Vadhavana</strong>, an eager Data Analyst and React JS Developer based in Somnath, Veraval. I love turning complex data into compelling visualisations and building fast, responsive web applications.
+                </p>
+                <p className="bio-text" style={{ marginTop: 16 }}>
+                  Currently at <strong>Chemtrols Industries</strong>, I work with industrial automation data — cleaning, preprocessing, and visualising sensor outputs for IOCL reports. I thrive at the intersection of data and design.
+                </p>
+              </>
+            )}
 
             <div className="education-list">
               <h3 className="edu-heading">Education</h3>
-              {education.map((e, i) => (
-                <motion.div key={e._id || i} className="edu-item glass" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                  <div className="edu-year">{e.year}</div>
-                  <div>
-                    <div className="edu-degree">{e.degree}</div>
-                    <div className="edu-inst">{e.institution} · {e.location || e.loc}</div>
+              {loading && !data ? (
+                Array(3).fill(0).map((_, i) => (
+                  <div key={i} className="edu-item glass" style={{ padding: '20px' }}>
+                    <Skeleton width="60px" height="14px" className="mb-2" />
+                    <Skeleton width="100%" height="18px" className="mb-1" />
+                    <Skeleton width="150px" height="14px" />
                   </div>
-                </motion.div>
-              ))}
+                ))
+              ) : (
+                education.map((e, i) => (
+                  <motion.div key={e._id || i} className="edu-item glass" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                    <div className="edu-year">{e.year}</div>
+                    <div>
+                      <div className="edu-degree">{e.degree}</div>
+                      <div className="edu-inst">{e.institution} · {e.location || e.loc}</div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
 
             <div className="about-cta">

@@ -13,6 +13,7 @@ app.use(express.json());
 // Routes
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/api/chat', require('./routes/chat'));
 
 // MongoDB Connection
 // Only connect if MONGO_URI is present

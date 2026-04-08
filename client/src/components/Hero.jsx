@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import * as THREE from 'three'
+import { Skeleton } from './Skeleton'
 import './Hero.css'
 
 import developer1 from '../assets/images/developer-1.jpg'
@@ -8,7 +9,7 @@ import developer2 from '../assets/images/developer-2.jpg'
 
 const TITLES = ['Data Analyst', 'Full Stack Developer', 'Freelancer']
 
-export default function Hero({ data }) {
+export default function Hero({ data, loading }) {
   const canvasRef = useRef(null)
   const [titleIndex, setTitleIndex] = useState(0)
   const [displayed, setDisplayed] = useState('')
@@ -93,6 +94,7 @@ export default function Hero({ data }) {
   // Typewriter effect
   useEffect(() => {
     const current = titles[titleIndex]
+    if (!titles.length) return;
     if (!deleting && displayed === current) {
       const t = setTimeout(() => setDeleting(true), 2500)
       return () => clearTimeout(t)
@@ -133,8 +135,10 @@ export default function Hero({ data }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.7, ease: 'easeOut' }}
           >
-            {firstName}<br />
-            <span className="gradient-text neon-text">{lastName}</span>
+            {loading && !data?.name ? <Skeleton width="200px" height="40px" /> : firstName}<br />
+            <span className="gradient-text neon-text">
+              {loading && !data?.name ? <Skeleton width="300px" height="50px" className="mt-2" /> : lastName}
+            </span>
           </motion.h1>
 
           <motion.div
@@ -154,8 +158,17 @@ export default function Hero({ data }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            {data?.summary || 'Eager data enthusiast and React developer with a passion for building dynamic web applications and extracting insights from data.'}
-            {data?.location && <><br />Based in <strong>{data.location}</strong>.</>}
+            {loading && !data?.summary ? (
+              <>
+                <Skeleton width="100%" height="20px" />
+                <Skeleton width="80%" height="20px" className="mt-2" />
+              </>
+            ) : (
+              <>
+                {data?.summary || 'Eager data enthusiast and React developer with a passion for building dynamic web applications and extracting insights from data.'}
+                {data?.location && <><br />Based in <strong>{data.location}</strong>.</>}
+              </>
+            )}
           </motion.p>
 
           <motion.div
@@ -164,12 +177,21 @@ export default function Hero({ data }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.6 }}
           >
-            <a href="#contact" className="btn btn-primary" id="hero-contact-btn">
-              Get in Touch
-            </a>
-            <a href="#projects" className="btn btn-outline neon-border" id="hero-projects-btn">
-              View Projects
-            </a>
+            {loading && !data ? (
+              <>
+                <Skeleton width="160px" height="48px" borderRadius="8px" />
+                <Skeleton width="160px" height="48px" borderRadius="8px" />
+              </>
+            ) : (
+              <>
+                <a href="#contact" className="btn btn-primary" id="hero-contact-btn">
+                  Get in Touch
+                </a>
+                <a href="#projects" className="btn btn-outline neon-border" id="hero-projects-btn">
+                  View Projects
+                </a>
+              </>
+            )}
           </motion.div>
 
           <motion.div
@@ -178,17 +200,23 @@ export default function Hero({ data }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.4, duration: 0.6 }}
           >
-            <a href="https://github.com/khushalvadhavana" target="_blank" rel="noreferrer" className="social-link">
-              GitHub
-            </a>
-            <span className="social-sep">·</span>
-            <a href="https://www.linkedin.com/in/khushalvadhavana" target="_blank" rel="noreferrer" className="social-link">
-              LinkedIn
-            </a>
-            <span className="social-sep">·</span>
-            <a href="mailto:khushalvadhavana856@gmail.com" className="social-link">
-              Email
-            </a>
+            {loading && !data ? (
+              <Skeleton width="200px" height="20px" />
+            ) : (
+              <>
+                <a href="https://github.com/khushalvadhavana" target="_blank" rel="noreferrer" className="social-link">
+                  GitHub
+                </a>
+                <span className="social-sep">·</span>
+                <a href="https://www.linkedin.com/in/khushalvadhavana" target="_blank" rel="noreferrer" className="social-link">
+                  LinkedIn
+                </a>
+                <span className="social-sep">·</span>
+                <a href="mailto:khushalvadhavana856@gmail.com" className="social-link">
+                  Email
+                </a>
+              </>
+            )}
           </motion.div>
         </div>
 

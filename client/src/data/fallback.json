@@ -1,0 +1,106 @@
+{
+  "name": "Khushal Vadhavana",
+  "title": "Data Analyst, Full Stack Developer, Freelancer",
+  "email": "khushalvadhavana856@gmail.com",
+  "phone": "9638737342",
+  "location": "Somnath, Veraval-363365",
+  "github": "https://github.com/khushalvadhavana",
+  "linkedin": "https://www.linkedin.com/in/khushalvadhavana",
+  "summary": "Eager Data Analyst and Front-End (React JS) Developer with a strong foundation in building dynamic web applications and performing complex data analysis. Experienced in industrial automation data processing and CRM dashboard development.",
+  "skills": {
+    "languages": ["HTML", "CSS", "JavaScript", "Python"],
+    "frameworks": ["React JS", "Node JS", "Express JS"],
+    "databases": ["MongoDB", "MySQL", "PostgreSQL"],
+    "tools": ["PowerBI", "MS Excel", "Figma"],
+    "design": ["UI/UX Design", "Figma", "Bootstrap", "MUI"]
+  },
+  "experience": [
+    {
+      "id": 1,
+      "company": "Chemtrols Industries Pvt. Ltd.",
+      "location": "Vadodara",
+      "role": "Data Analyst",
+      "duration": "Jun 2024 – Present",
+      "description": [
+        "Clearing and preprocessing data for IOCL automation reports.",
+        "Automating routine reporting in Excel to streamline workflows.",
+        "Troubleshooting industrial sensor devices and automation systems."
+      ],
+      "tech": ["Python", "MS Excel", "PowerBI"]
+    },
+    {
+      "id": 2,
+      "company": "VeravalOnline Pvt. Ltd.",
+      "location": "Vadodara",
+      "role": "Front-End (React JS) Developer",
+      "duration": "Dec 2023 – Apr 2024",
+      "description": [
+        "Developed payroll, attendance, and salary slip generation systems.",
+        "Designed admin and employee dashboards using Bootstrap and MUI."
+      ],
+      "tech": ["React JS", "Bootstrap", "MUI"]
+    },
+    {
+      "id": 3,
+      "company": "Syndell Technologies Pvt. Ltd.",
+      "location": "Ahmedabad",
+      "role": "Front-End (React JS) Developer",
+      "duration": "Jun 2023 – Dec 2023",
+      "description": [
+        "Led development of a dynamic CRM admin dashboard.",
+        "Developed REST APIs to connect React frontend with MongoDB."
+      ],
+      "tech": ["React JS", "MongoDB", "REST API"]
+    },
+    {
+      "id": 4,
+      "company": "Zen Softtech Pvt. Ltd.",
+      "location": "Vadodara",
+      "role": "Front-End React JS Developer (Intern)",
+      "duration": "Dec 2022 – Apr 2023",
+      "description": [
+        "Developed E-learning management system (LMS) dashboards.",
+        "Converted Figma designs into functional React components."
+      ],
+      "tech": ["React JS", "Figma", "CSS"]
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "Netflix Data Analysis",
+      "description": "Conducted EDA on a dataset of 9,800+ movies using Python to visualize genre trends and popularity. Used Pandas, NumPy, Seaborn, and Matplotlib.",
+      "tech": ["Python", "Pandas", "NumPy", "Seaborn", "Matplotlib"],
+      "type": "Data Analysis",
+      "icon": "📊"
+    },
+    {
+      "id": 2,
+      "title": "Hotel Management System",
+      "description": "Built a React JS frontend for reservation tracking and room occupancy management, focusing on operational efficiency and user interface.",
+      "tech": ["React JS", "CSS", "JavaScript"],
+      "type": "Web App",
+      "icon": "🏨"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Computer Applications (BCA)",
+      "institution": "Maharaja Sayajirao University",
+      "location": "Vadodara",
+      "year": "2023"
+    },
+    {
+      "degree": "12th Grade",
+      "institution": "Ankur Saurabh High School",
+      "location": "Veraval",
+      "year": "2020"
+    },
+    {
+      "degree": "10th Grade",
+      "institution": "Darshan School",
+      "location": "Veraval",
+      "year": "2018"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import {
   FaSignOutAlt, FaPlus, FaTrash, FaSave, FaTachometerAlt,
   FaEye, FaEyeSlash, FaTimes, FaCheckCircle
 } from 'react-icons/fa';
+import { fallbackPortfolioData } from '../portfolioData';
 import './Admin.css';
 
 export default function Admin({ onUpdate }) {
@@ -28,10 +29,16 @@ export default function Admin({ onUpdate }) {
         axios.get('/api/portfolio')
       ]);
       setContacts(cRes.data.data || []);
-      setPortfolio(pRes.data.data);
+      if (pRes.data?.success && pRes.data?.data && Object.keys(pRes.data.data).length > 0) {
+        setPortfolio(pRes.data.data);
+      } else {
+        console.warn("API returned empty portfolio, using fallback");
+        setPortfolio(fallbackPortfolioData);
+      }
     } catch (err) {
       toast.error('Failed to fetch data');
       console.error(err);
+      setPortfolio(fallbackPortfolioData);
     } finally {
       setLoading(false);
     }

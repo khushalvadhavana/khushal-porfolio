@@ -10,12 +10,12 @@
       "destination": "/client/dist/assets/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/(favicon.svg|vite.svg|.*\\.pdf|.*\\.jpg|.*\\.png|.*\\.ico)",
       "destination": "/client/dist/$1"
     },
     {
-      "source": "/(.*).html",
-      "destination": "/client/dist/$1.html"
+      "source": "/((?!api).*)",
+      "destination": "/client/dist/index.html"
     }
   ]
 }

@@ -1,9 +1,4 @@
-const express = require('express');
-const router = express.Router();
-const Portfolio = require('../models/Portfolio');
-
-// Initial seed data (from your previous code)
-const initialPortfolioData = {
+export const fallbackPortfolioData = {
   name: "Khushal Vadhavana",
   title: "Data Analyst, Full Stack Developer, Freelancer",
   email: "khushalvadhavana856@gmail.com",
@@ -98,61 +93,5 @@ const initialPortfolioData = {
       location: "Vadodara",
       year: "2023",
     },
-    {
-      degree: "12th Grade",
-      institution: "Ankur Saurabh High School",
-      location: "Veraval",
-      year: "2020",
-    },
-    {
-      degree: "10th Grade",
-      institution: "Darshan School",
-      location: "Veraval",
-      year: "2018",
-    },
   ],
 };
-
-// In-memory fallback store (used when MongoDB is not available)
-let inMemoryPortfolio = { ...initialPortfolioData, updatedAt: new Date() };
-
-// GET /api/portfolio
-router.get('/', async (req, res) => {
-  // Edge caching: cache for 1 hour, stale-while-revalidate for 24 hours
-  res.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
-  try {
-    let portfolio = await Portfolio.findOne();
-    if (!portfolio) {
-      portfolio = new Portfolio(initialPortfolioData);
-      await portfolio.save();
-    }
-    inMemoryPortfolio = portfolio.toObject(); // keep in-memory in sync
-    res.json({ success: true, data: portfolio });
-  } catch (err) {
-    console.warn('⚠️ MongoDB unavailable, serving in-memory data:', err.message);
-    res.json({ success: true, data: inMemoryPortfolio, source: 'fallback' });
-  }
-});
-
-// PUT /api/portfolio
-router.put('/', async (req, res) => {
-  try {
-    const updatedData = req.body;
-    let portfolio = await Portfolio.findOne();
-    if (!portfolio) {
-      portfolio = new Portfolio(updatedData);
-    } else {
-      Object.assign(portfolio, updatedData);
-      portfolio.updatedAt = Date.now();
-    }
-    await portfolio.save();
-    inMemoryPortfolio = portfolio.toObject(); // keep in-memory in sync
-    res.json({ success: true, message: 'Portfolio updated successfully!', data: portfolio });
-  } catch (err) {
-    console.warn('⚠️ MongoDB unavailable, saving to in-memory store:', err.message);
-    inMemoryPortfolio = { ...inMemoryPortfolio, ...req.body, updatedAt: new Date() };
-    res.json({ success: true, message: 'Saved (in-memory, changes not persisted to DB)', data: inMemoryPortfolio });
-  }
-});
-
-module.exports = router;

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Skeleton } from './Skeleton'
 import './Skills.css'
 
 const ICONS = { languages: '💻', frameworks: '⚡', databases: '🗄️', tools: '📊', design: '🎨' }
@@ -20,7 +21,7 @@ const fadeUp = {
   })
 }
 
-export default function Skills({ data }) {
+export default function Skills({ data, loading }) {
   // Build skillGroups from API data, fallback to empty
   const skillGroups = data
     ? Object.entries(data).map(([key, skills]) => ({
@@ -46,45 +47,72 @@ export default function Skills({ data }) {
         <div className="skills-layout">
           {/* Badges */}
           <div className="skills-groups">
-            {skillGroups.map((group, gi) => (
-              <motion.div key={group.category} className="skill-group glass" variants={fadeUp} custom={gi} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <div className="skill-group-header">
-                  <span className="skill-icon">{group.icon}</span>
-                  <span className="skill-category">{group.category}</span>
+            {loading && !data ? (
+              Array(4).fill(0).map((_, i) => (
+                <div key={i} className="skill-group glass">
+                  <div className="skill-group-header">
+                    <Skeleton width="120px" height="24px" />
+                  </div>
+                  <div className="skill-badges" style={{ gap: '8px' }}>
+                    {Array(5).fill(0).map((_, j) => (
+                      <Skeleton key={j} width="80px" height="28px" borderRadius="20px" />
+                    ))}
+                  </div>
                 </div>
-                <div className="skill-badges">
-                  {group.skills.map((s, si) => (
-                    <motion.span key={s} className="skill-badge" variants={fadeUp} custom={si * 0.5} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                      whileHover={{ scale: 1.08, y: -2 }}
-                    >
-                      {s}
-                    </motion.span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+              ))
+            ) : (
+              skillGroups.map((group, gi) => (
+                <motion.div key={group.category} className="skill-group glass" variants={fadeUp} custom={gi} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                  <div className="skill-group-header">
+                    <span className="skill-icon">{group.icon}</span>
+                    <span className="skill-category">{group.category}</span>
+                  </div>
+                  <div className="skill-badges">
+                    {group.skills.map((s, si) => (
+                      <motion.span key={s} className="skill-badge" variants={fadeUp} custom={si * 0.5} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                        whileHover={{ scale: 1.08, y: -2 }}
+                      >
+                        {s}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
 
           {/* Progress bars */}
           <div className="skills-progress">
             <h3 className="progress-heading">Top Skills</h3>
-            {topSkills.map((s, i) => (
-              <motion.div key={s.name} className="progress-item" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <div className="progress-meta">
-                  <span className="progress-name">{s.name}</span>
-                  <span className="progress-pct gradient-text">{s.pct}%</span>
+            {loading && !data ? (
+              Array(5).fill(0).map((_, i) => (
+                <div key={i} className="progress-item">
+                  <div className="progress-meta">
+                    <Skeleton width="100px" height="14px" />
+                    <Skeleton width="40px" height="14px" />
+                  </div>
+                  <Skeleton width="100%" height="8px" borderRadius="10px" />
                 </div>
-                <div className="progress-bar-bg">
-                  <motion.div
-                    className="progress-bar-fill"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${s.pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
-                  />
-                </div>
-              </motion.div>
-            ))}
+              ))
+            ) : (
+              topSkills.map((s, i) => (
+                <motion.div key={s.name} className="progress-item" variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                  <div className="progress-meta">
+                    <span className="progress-name">{s.name}</span>
+                    <span className="progress-pct gradient-text">{s.pct}%</span>
+                  </div>
+                  <div className="progress-bar-bg">
+                    <motion.div
+                      className="progress-bar-fill"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${s.pct}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
+                    />
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </div>

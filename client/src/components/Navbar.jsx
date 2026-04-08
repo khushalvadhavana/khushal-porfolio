@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import './Navbar.css'
 
 const navLinks = [
@@ -15,6 +16,9 @@ export default function Navbar({ data }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('home')
+  const location = useLocation()
+
+  if (location.pathname === '/admin') return null;
 
   const firstName = data?.name ? data.name.split(' ')[0] : 'Khushal'
   const firstLetter = firstName.charAt(0)
